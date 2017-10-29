@@ -7,6 +7,11 @@ describe Contact do
     expect(contact).to be_valid
   end
 
+  it '電話番号を３つ持つこと' do
+    contact = build(:contact)
+    expect(contact.phones.length).to eq 3
+  end
+
   it '名がなければ無効な状態であること' do
     contact = build(:contact, firstname: nil)
     contact.valid?
