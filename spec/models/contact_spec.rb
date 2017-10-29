@@ -26,7 +26,7 @@ describe Contact do
   end
 
   it '重複したメールアドレスなら無効な状態であること' do
-    FactoryGirl.create(:contact, email: 'aaron@example.com')
+    create(:contact, email: 'aaron@example.com')
     contact = build(:contact, email: 'aaron@example.com')
     contact.valid?
     expect(contact.errors[:email]).to include('has already been taken')
@@ -43,17 +43,17 @@ describe Contact do
   describe '文字で姓をフィルタする' do
 
     before :each do
-      @smith = Contact.create!(
+      @smith = create(:contact,
           firstname: 'John',
           lastname: 'Smith',
           email: 'jsmith@example.com'
       )
-      @jones = Contact.create!(
+      @jones = create(:contact,
           firstname: 'Tim',
           lastname: 'Jones',
           email: 'tjones@example.com'
       )
-      @johnson = Contact.create!(
+      @johnson = create(:contact,
           firstname: 'John',
           lastname: 'Johnson',
           email: 'jjohnson@example.com'
