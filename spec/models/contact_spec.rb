@@ -2,49 +2,42 @@ require 'rails_helper'
 
 describe Contact do
 
-  it '姓と名とメールがあれば有効な状態であること' do
-    contact = Contact.new(
-        firstname: 'Aaron',
-        lastname: 'Sumner',
-        email: 'tester@example.com')
+  it '有効なファクトリを持つこと' do
+    contact = FactoryGirl.build(:contact)
     expect(contact).to be_valid
   end
 
   it '名がなければ無効な状態であること' do
-    contact = Contact.new(firstname: nil)
+    contact = FactoryGirl.build(:contact, firstname: nil)
     contact.valid?
     expect(contact.errors[:firstname]).to include('can\'t be blank')
   end
 
   it '姓がなければ無効な状態であること' do
-    contact = Contact.new(lastname: nil)
+    contact = FactoryGirl.build(:contact, lastname: nil)
     contact.valid?
     expect(contact.errors[:lastname]).to include('can\'t be blank')
   end
 
   it 'メールアドレスがなければ無効な状態であること' do
-    contact = Contact.new(email: nil)
+    contact = FactoryGirl.build(:contact, email: nil)
     contact.valid?
     expect(contact.errors[:email]).to include('can\'t be blank')
   end
 
   it '重複したメールアドレスなら無効な状態であること' do
-    Contact.create(
-        firstname: 'Joe', lastname: 'Tester',
-        email: 'tester@example.com'
-    )
-    contact = Contact.new(
-        firstname: 'Jane', lastname: 'Tester',
-        email: 'tester@example.com'
-    )
+    FactoryGirl.create(:contact, email: 'aaron@example.com')
+    contact = FactoryGirl.build(:contact, email: 'aaron@example.com')
     contact.valid?
     expect(contact.errors[:email]).to include('has already been taken')
   end
 
   it '連絡先のフルネームを文字列として返すこと' do
-    contact = Contact.new(firstname: 'John', lastname: 'Doe',
-                          email: 'johndoe@example.com')
-    expect(contact.name).to eq 'John Doe'
+    contact = FactoryGirl.build(:contact,
+        firstname: 'Jane',
+        lastname: 'Smith'
+    )
+    expect(contact.name).to eq 'Jane Smith'
   end
 
   describe '文字で姓をフィルタする' do
